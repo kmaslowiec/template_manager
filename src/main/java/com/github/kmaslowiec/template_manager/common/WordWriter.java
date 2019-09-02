@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +53,17 @@ public class WordWriter {
 				e.printStackTrace();
 				}
 			return temp;
+		}
+		
+		public void writeToTxtFile(List<String> list) {
+			try {
+				FileWriter writer = new FileWriter("TextTest.txt");
+				writer.append("dupa");
+				writer.close();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 		}
 }

@@ -8,7 +8,8 @@ public class LogicTester {
 		WordWriter word = new WordWriter();
 		//word.readWord();
 		List<String> list = word.readWordToList("test.docx");
-		list.forEach(System.out::println);
+		//list.forEach(System.out::println);
+		word.writeToTxtFile(list);
 	}
 
 }
