@@ -16,6 +16,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -73,7 +74,7 @@ public class MainFrame extends JFrame {
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 260, Short.MAX_VALUE)
+				.addGap(0, 239, Short.MAX_VALUE)
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -87,5 +88,4 @@ public class MainFrame extends JFrame {
 			openFile.pickMe();
 		});
 	}
-
 }
