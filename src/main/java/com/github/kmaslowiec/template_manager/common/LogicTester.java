@@ -5,7 +5,7 @@ import java.util.List;
 public class LogicTester {
 
 	public static void main(String[] args) {
-		WordWriter word = new WordWriter();
+		WordConverter word = new WordConverter();
 		//word.parseDoc();
 	}
 

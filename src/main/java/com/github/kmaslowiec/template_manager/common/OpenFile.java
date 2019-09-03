@@ -11,7 +11,7 @@ public class OpenFile {
 	JFileChooser fileChooser;
 	
 	public void pickMe() {
-		WordWriter read = new WordWriter();
+		WordConverter read = new WordConverter();
 		fileChooser = new JFileChooser();
 		FileFilter filter = new FileNameExtensionFilter("Word files", "docx");
 		fileChooser.addChoosableFileFilter(filter);
