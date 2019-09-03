@@ -12,7 +12,7 @@ public class OpenFile {
 	
 	public void pickMe() {
 		fileChooser = new JFileChooser();
-		FileFilter filter = new FileNameExtensionFilter("Word docx files", "docx");
+		FileFilter filter = new FileNameExtensionFilter("Word files", "docx");
 		fileChooser.addChoosableFileFilter(filter);
 		
 		if(fileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {			
