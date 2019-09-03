@@ -14,7 +14,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class WordConverter {
 	
-	public static final String RESOURCE_PATH = "./src/main/java/com/github/kmaslowiec/template_manager/common/hello.txt";
+	public static final String RESOURCE_PATH = "./src/main/java/com/github/kmaslowiec/template_manager/resources/saved_templates/";
 	
 	/*
 	 * Read from the docx and parse to txt
@@ -23,13 +23,15 @@ public class WordConverter {
 		try {
 			FileInputStream fis = new FileInputStream(path);
 			XWPFWordExtractor we  =new XWPFWordExtractor(new XWPFDocument(fis));
-			String text = we.getText();
-			System.out.println(path.getName());
-			
-			Files.write(Paths.get(RESOURCE_PATH + path.getName()), text.getBytes());
-			 
+			String text = we.getText();	
+			Files.write(Paths.get(RESOURCE_PATH + txtFileName(path.getName())), text.getBytes());			 
 		} catch (Exception exep) {
 			System.out.println(exep);
 		}
+	}
+	
+	private String txtFileName(String name) {
+		String[] arr = name.split("[.]");
+		return arr[0] + ".txt";
 	}
 }
