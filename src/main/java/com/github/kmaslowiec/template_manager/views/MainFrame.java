@@ -1,31 +1,33 @@
 package com.github.kmaslowiec.template_manager.views;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.DefaultListModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.JTextPane;
+import javax.swing.JList;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JScrollPane;
+import javax.swing.AbstractListModel;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
-
-	private JPanel contentPane;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
 	private OpenFile openFile = new OpenFile();
+	private JScrollPane scrollPane;
+	private JList list;
 
 	/**
 	 * Launch the application.
@@ -64,19 +66,43 @@ public class MainFrame extends JFrame {
 		mntmAddTemplate = new JMenuItem("Add template");
 		
 		mnFile.add(mntmAddTemplate);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 440, Short.MAX_VALUE)
+		
+		scrollPane = new JScrollPane();
+		
+		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(13, Short.MAX_VALUE))
 		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGap(0, 239, Short.MAX_VALUE)
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
-		contentPane.setLayout(gl_contentPane);
+		
+		list = new JList();
+		list.setModel(new AbstractListModel() {
+			String[] values = new String[] {"Konrad", "John", "Test"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		scrollPane.setViewportView(list);
+		list.addListSelectionListener(a->{
+			if(!a.getValueIsAdjusting()) {
+				System.out.println(list.getSelectedValue().toString());
+			}
+		});
+		
+		getContentPane().setLayout(groupLayout);
 	}
 	
 	public void createEvents() {
