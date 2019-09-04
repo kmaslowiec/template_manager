@@ -13,36 +13,30 @@ import com.github.kmaslowiec.template_manager.common.WordConverter;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JTextPane;
 import javax.swing.JList;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
 
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
-	private OpenFile openFile = new OpenFile();
+	private OpenFile openFile;
 	private JScrollPane scrollPane;
 	private JList<Template> list;
 	private DefaultListModel<Template> model;
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
-	private WordConverter convert = new WordConverter();
-	private List<Template> templates = new ArrayList<>();
+	private WordConverter convert;
+	private List<Template> templates;
 
 	/**
 	 * Launch the application.
@@ -64,8 +58,17 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		openFile = new OpenFile();
+		convert = new WordConverter();
+		templates = new ArrayList<>();
+		
 		initComponents();
 		createEvents();
+		
+		if(convert.isListExist(WordConverter.RESOURCE_PATH + "templates")) {
+			templates = convert.deserializeArrayList();
+			model.addAll(templates);
+		}
 	}
 	
 	private void initComponents() {
@@ -108,13 +111,15 @@ public class MainFrame extends JFrame {
 			chosenFile = openFile.pickMe();
 			Template temp = convert.parseDoc(chosenFile);
 			templates.add(temp);
-			System.out.print(temp.toString() + " added");
+			model.addElement(temp);
 		});
 	}
 	
 	private void addElementEvent() {
 		mntmAddElement.addActionListener(a -> {
+			model.removeAllElements();
 			model.addAll(templates);
+			convert.serializeArrayList(templates);
 		});
 	}
 	

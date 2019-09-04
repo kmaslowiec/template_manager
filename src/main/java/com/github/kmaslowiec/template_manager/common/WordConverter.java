@@ -28,9 +28,7 @@ public class WordConverter {
 			String text = we.getText();
 			Template temp = new Template(fileTitle(path.getName()), text);
 			we.close();
-			System.out.println(temp.toString());
 			return temp;
-			//Files.write(Paths.get(RESOURCE_PATH + txtFileName(path.getName())), text.getBytes());
 			
 		} catch (Exception exep) {
 			System.out.println(exep);
@@ -38,21 +36,13 @@ public class WordConverter {
 		}
 		return new Template("", "");
 	}
-
-	private String txtFileName(String name) {
-		String[] arr = name.split("[.]");
-		return arr[0] + ".txt";
-	}
 	
 	private String fileTitle(String name) {
 		String[] arr = name.split("[.]");
 		return arr[0];
 	}
 	
-	public void serializeArrayList(Template temp) {
-		ArrayList<Template> templates = new ArrayList<>();      
-        templates.add(temp);
- 
+	public void serializeArrayList(List<Template> templates) {
         try
         {
             FileOutputStream fos = new FileOutputStream(RESOURCE_PATH + "templates");
@@ -75,7 +65,7 @@ public class WordConverter {
             FileInputStream fis = new FileInputStream(RESOURCE_PATH + "templates");
             ObjectInputStream ois = new ObjectInputStream(fis);
  
-            templates = (ArrayList) ois.readObject();
+            templates = ((ArrayList) ois.readObject());
  
             ois.close();
             fis.close();
@@ -91,5 +81,11 @@ public class WordConverter {
         }
 		
 		return templates;
+	}
+	
+	public boolean isListExist(String path) {
+		File file = new File(path);
+		
+		return file.exists();
 	}
 }
