@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import com.github.kmaslowiec.template_manager.common.OpenFile;
+import com.github.kmaslowiec.template_manager.common.Template;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -19,6 +20,8 @@ import javax.swing.JList;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -28,6 +31,8 @@ public class MainFrame extends JFrame {
 	private OpenFile openFile = new OpenFile();
 	private JScrollPane scrollPane;
 	private JList list;
+	private DefaultListModel<Template> model;
+	private JMenuItem mntmAddElement;
 
 	/**
 	 * Launch the application.
@@ -53,9 +58,12 @@ public class MainFrame extends JFrame {
 		createEvents();
 	}
 	
-	public void initComponents() {
+	private void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
+		
+		model = new DefaultListModel<Template>();
+		list = new JList<Template>(model);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -63,9 +71,11 @@ public class MainFrame extends JFrame {
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 		
-		mntmAddTemplate = new JMenuItem("Add template");
-		
+		mntmAddTemplate = new JMenuItem("Add template");	
 		mnFile.add(mntmAddTemplate);
+		mntmAddElement = new JMenuItem("Add element");
+		addElementEvent(new Template("Test", "Content"), model);
+		mnFile.add(mntmAddElement);
 		
 		scrollPane = new JScrollPane();
 		
@@ -84,17 +94,10 @@ public class MainFrame extends JFrame {
 					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+	
 		
-		list = new JList();
-		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Konrad", "John", "Test"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		
+		
 		scrollPane.setViewportView(list);
 		list.addListSelectionListener(a->{
 			if(!a.getValueIsAdjusting()) {
@@ -105,13 +108,19 @@ public class MainFrame extends JFrame {
 		getContentPane().setLayout(groupLayout);
 	}
 	
-	public void createEvents() {
+	private void createEvents() {
 		addTemplateEvent();
 	}
 	
-	public void addTemplateEvent() {
+	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			openFile.pickMe();
+		});
+	}
+	
+	private void addElementEvent(Template temp, DefaultListModel<Template> model) {
+		mntmAddElement.addActionListener(a -> {
+			model.addElement(temp);
 		});
 	}
 }
