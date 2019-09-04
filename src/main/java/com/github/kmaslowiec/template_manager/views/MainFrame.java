@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 import com.github.kmaslowiec.template_manager.common.Template;
+import com.github.kmaslowiec.template_manager.common.WordConverter;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -21,6 +22,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -33,6 +35,8 @@ public class MainFrame extends JFrame {
 	private JList list;
 	private DefaultListModel<Template> model;
 	private JMenuItem mntmAddElement;
+	private File chosenFile;
+	private WordConverter convert = new WordConverter();
 
 	/**
 	 * Launch the application.
@@ -74,6 +78,7 @@ public class MainFrame extends JFrame {
 		mntmAddTemplate = new JMenuItem("Add template");	
 		mnFile.add(mntmAddTemplate);
 		mntmAddElement = new JMenuItem("Add element");
+		
 		addElementEvent(new Template("Test", "Content"), model);
 		mnFile.add(mntmAddElement);
 		
@@ -114,7 +119,9 @@ public class MainFrame extends JFrame {
 	
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
-			openFile.pickMe();
+			chosenFile = openFile.pickMe();
+			Template temp = convert.parseDoc(chosenFile);
+			model.addElement(temp);
 		});
 	}
 	

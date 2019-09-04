@@ -21,16 +21,22 @@ public class WordConverter {
 	/*
 	 * Read from the docx and parse to txt
 	 */
-	public void parseDoc(File path) {
+	public Template parseDoc(File path) {
 		try {
 			FileInputStream fis = new FileInputStream(path);
 			XWPFWordExtractor we = new XWPFWordExtractor(new XWPFDocument(fis));
 			String text = we.getText();
-			Files.write(Paths.get(RESOURCE_PATH + txtFileName(path.getName())), text.getBytes());
+			Template temp = new Template(fileTitle(path.getName()), text);
 			we.close();
+			System.out.println(temp.toString());
+			return temp;
+			//Files.write(Paths.get(RESOURCE_PATH + txtFileName(path.getName())), text.getBytes());
+			
 		} catch (Exception exep) {
 			System.out.println(exep);
+			
 		}
+		return new Template("", "");
 	}
 
 	private String txtFileName(String name) {
@@ -38,9 +44,14 @@ public class WordConverter {
 		return arr[0] + ".txt";
 	}
 	
-	public void serilizeArrayList() {
+	private String fileTitle(String name) {
+		String[] arr = name.split("[.]");
+		return arr[0];
+	}
+	
+	public void serializeArrayList(Template temp) {
 		ArrayList<Template> templates = new ArrayList<>();      
-        templates.add(new Template("Hello", "Content"));
+        templates.add(temp);
  
         try
         {
@@ -56,7 +67,7 @@ public class WordConverter {
         }
 	}
 	
-	public List<Template> deserilizeArrayList(){
+	public List<Template> deserializeArrayList(){
 		ArrayList<Template> templates = new ArrayList<>();
         
         try
