@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 import com.github.kmaslowiec.template_manager.common.Template;
@@ -21,6 +22,8 @@ import javax.swing.JList;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
+import javax.swing.DefaultListCellRenderer;
+
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem mntmAddTemplate;
 	private OpenFile openFile = new OpenFile();
 	private JScrollPane scrollPane;
-	private JList list;
+	private JList<Template> list;
 	private DefaultListModel<Template> model;
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
@@ -82,7 +85,7 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmAddTemplate);
 		mntmAddElement = new JMenuItem("Save templates");
 		
-		addElementEvent(new Template("Test", "Content"), model);
+		
 		mnFile.add(mntmAddElement);
 		
 		scrollPane = new JScrollPane();
@@ -118,6 +121,21 @@ public class MainFrame extends JFrame {
 	
 	private void createEvents() {
 		addTemplateEvent();
+		addElementEvent(new Template("Test", "Content"), model);
+		list.setCellRenderer(new DefaultListCellRenderer() {
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if(renderer instanceof JLabel && value instanceof Template ) {
+					((JLabel) renderer).setText(((Template)value).getFileName());
+				}
+				
+				return renderer; 
+			}
+			
+		});
 	}
 	
 	private void addTemplateEvent() {
@@ -125,7 +143,6 @@ public class MainFrame extends JFrame {
 			chosenFile = openFile.pickMe();
 			Template temp = convert.parseDoc(chosenFile);
 			templates.add(temp);
-			model.addAll(templates);
 			System.out.print(temp.toString() + " added");
 		});
 	}
