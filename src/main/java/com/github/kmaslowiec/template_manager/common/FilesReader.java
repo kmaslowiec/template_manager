@@ -1,5 +1,6 @@
 package com.github.kmaslowiec.template_manager.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.stream.Stream;
@@ -15,5 +16,11 @@ public class FilesReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+	}
+	
+	public boolean isListExist(String path) {
+		File file = new File(path);
+		
+		return file.exists();
 	}
 }
