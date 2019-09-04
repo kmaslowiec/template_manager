@@ -74,6 +74,7 @@ public class MainFrame extends JFrame {
 		
 		model = new DefaultListModel<Template>();
 		list = new JList<Template>(model);
+		setupDefaultJListRenderer(list);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -89,53 +90,17 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmAddElement);
 		
 		scrollPane = new JScrollPane();
+		scrollPane.setViewportView(list);
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(13, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
-	
-		
-		
-		
-		scrollPane.setViewportView(list);
-		list.addListSelectionListener(a->{
-			if(!a.getValueIsAdjusting()) {
-				System.out.println(list.getSelectedValue().toString());
-			}
-		});
+		initGroupLayout(groupLayout);
 		
 		getContentPane().setLayout(groupLayout);
 	}
 	
 	private void createEvents() {
 		addTemplateEvent();
-		addElementEvent(new Template("Test", "Content"), model);
-		list.setCellRenderer(new DefaultListCellRenderer() {
-
-			@Override
-			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-					boolean cellHasFocus) {
-				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if(renderer instanceof JLabel && value instanceof Template ) {
-					((JLabel) renderer).setText(((Template)value).getFileName());
-				}
-				
-				return renderer; 
-			}
-			
-		});
+		addElementEvent();
 	}
 	
 	private void addTemplateEvent() {
@@ -147,9 +112,43 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
-	private void addElementEvent(Template temp, DefaultListModel<Template> model) {
+	private void addElementEvent() {
 		mntmAddElement.addActionListener(a -> {
 			model.addAll(templates);
 		});
 	}
+	
+	private void setupDefaultJListRenderer(JList<Template> list) {
+		list.setCellRenderer(new DefaultListCellRenderer() {
+
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+					boolean cellHasFocus) {
+				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				if(renderer instanceof JLabel && value instanceof Template ) {
+					((JLabel) renderer).setText(((Template)value).getFileName());
+				}
+				
+				return renderer; 
+			}	
+		});
+	}
+
+	private void initGroupLayout(GroupLayout groupLayout) {
+		groupLayout.setHorizontalGroup(
+				groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(13, Short.MAX_VALUE))
+			);
+			groupLayout.setVerticalGroup(
+				groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+			);
+	}
+
 }
