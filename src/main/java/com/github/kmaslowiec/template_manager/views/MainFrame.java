@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.AbstractListModel;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -37,6 +39,7 @@ public class MainFrame extends JFrame {
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
 	private WordConverter convert = new WordConverter();
+	private List<Template> templates = new ArrayList<>();
 
 	/**
 	 * Launch the application.
@@ -77,7 +80,7 @@ public class MainFrame extends JFrame {
 		
 		mntmAddTemplate = new JMenuItem("Add template");	
 		mnFile.add(mntmAddTemplate);
-		mntmAddElement = new JMenuItem("Add element");
+		mntmAddElement = new JMenuItem("Save templates");
 		
 		addElementEvent(new Template("Test", "Content"), model);
 		mnFile.add(mntmAddElement);
@@ -121,13 +124,15 @@ public class MainFrame extends JFrame {
 		mntmAddTemplate.addActionListener(a -> {
 			chosenFile = openFile.pickMe();
 			Template temp = convert.parseDoc(chosenFile);
-			model.addElement(temp);
+			templates.add(temp);
+			model.addAll(templates);
+			System.out.print(temp.toString() + " added");
 		});
 	}
 	
 	private void addElementEvent(Template temp, DefaultListModel<Template> model) {
 		mntmAddElement.addActionListener(a -> {
-			model.addElement(temp);
+			model.addAll(templates);
 		});
 	}
 }
