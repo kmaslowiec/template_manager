@@ -104,7 +104,10 @@ public class MainFrame extends JFrame {
 	private void createEvents() {
 		addTemplateEvent();
 		addElementEvent();
+<<<<<<< HEAD
 		templateClickedEvent();
+=======
+>>>>>>> 3fadb8484b133fb76cb77ef9f2188ebd7f532917
 	}
 	
 	private void addTemplateEvent() {
@@ -124,6 +127,7 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+<<<<<<< HEAD
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a->{
 			if(!a.getValueIsAdjusting()) {
@@ -132,6 +136,8 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+=======
+>>>>>>> 3fadb8484b133fb76cb77ef9f2188ebd7f532917
 	private void setupDefaultJListRenderer(JList<Template> list) {
 		list.setCellRenderer(new DefaultListCellRenderer() {
 
