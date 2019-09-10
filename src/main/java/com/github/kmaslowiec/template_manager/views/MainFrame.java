@@ -65,8 +65,8 @@ public class MainFrame extends JFrame {
 		initComponents();
 		createEvents();
 		
-		if(convert.isListExist(WordConverter.RESOURCE_PATH + "templates")) {
-			templates = convert.deserializeArrayList();
+		if(convert.isListExist(WordConverter.RESOURCE_PATH + "saved_templates/templates")) {
+			templates = convert.deserializeArrayList("saved_templates/templates");
 			model.addAll(templates);
 		}
 	}
@@ -121,7 +121,7 @@ public class MainFrame extends JFrame {
 		mntmAddElement.addActionListener(a -> {
 			model.removeAllElements();
 			model.addAll(templates);
-			convert.serializeArrayList(templates);
+			convert.serializeArrayList(templates, "saved_templates/templates");
 		});
 	}
 	
