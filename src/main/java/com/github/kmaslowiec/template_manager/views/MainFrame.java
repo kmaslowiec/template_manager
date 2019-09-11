@@ -23,9 +23,12 @@ import javax.swing.DefaultListCellRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements KeyListener {
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
@@ -102,10 +105,12 @@ public class MainFrame extends JFrame {
 	}
 	
 	private void createEvents() {
+		addKeyListener(this);
+		setFocusable(true);
+	    setFocusTraversalKeysEnabled(false);
 		addTemplateEvent();
-		addElementEvent();
+		saveTemplates();
 		templateClickedEvent();
-
 	}
 	
 	private void addTemplateEvent() {
@@ -114,14 +119,18 @@ public class MainFrame extends JFrame {
 			Template temp = convert.parseDoc(chosenFile);
 			templates.add(temp);
 			model.addElement(temp);
+			requestFocus();
 		});
 	}
 	
-	private void addElementEvent() {
+	private void saveTemplates() {
 		mntmAddElement.addActionListener(a -> {
 			model.removeAllElements();
-			model.addAll(templates);
-			convert.serializeArrayList(templates, "saved_templates/templates");
+			if(templates != null) {
+				model.addAll(templates);
+				convert.serializeArrayList(templates, "saved_templates/templates");
+				requestFocus();
+			}	
 		});
 	}
 	
@@ -129,6 +138,7 @@ public class MainFrame extends JFrame {
 		list.addListSelectionListener(a->{
 			if(!a.getValueIsAdjusting()) {
 				System.out.println(list.getSelectedValue().getContent());
+				requestFocus();
 			}
 		});
 	}
@@ -164,6 +174,23 @@ public class MainFrame extends JFrame {
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 			);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		System.out.println("Typed");
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		//System.out.println("Pressed");
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
 	}
 
 }
