@@ -16,7 +16,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 public class WordConverter {
 
-	public static final String RESOURCE_PATH = "./src/main/java/com/github/kmaslowiec/template_manager/resources/saved_templates/";
+	public static final String RESOURCE_PATH = "./src/main/java/com/github/kmaslowiec/template_manager/resources/";
 
 	/*
 	 * Read from the docx and parse to txt
@@ -42,10 +42,10 @@ public class WordConverter {
 		return arr[0];
 	}
 	
-	public void serializeArrayList(List<Template> templates) {
+	public void serializeArrayList(List<Template> templates, String path) {
         try
         {
-            FileOutputStream fos = new FileOutputStream(RESOURCE_PATH + "templates");
+            FileOutputStream fos = new FileOutputStream(RESOURCE_PATH + path);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(templates);
             oos.close();
@@ -57,12 +57,12 @@ public class WordConverter {
         }
 	}
 	
-	public List<Template> deserializeArrayList(){
+	public List<Template> deserializeArrayList(String path){
 		ArrayList<Template> templates = new ArrayList<>();
         
         try
         {
-            FileInputStream fis = new FileInputStream(RESOURCE_PATH + "templates");
+            FileInputStream fis = new FileInputStream(RESOURCE_PATH +  path);
             ObjectInputStream ois = new ObjectInputStream(fis);
  
             templates = ((ArrayList) ois.readObject());

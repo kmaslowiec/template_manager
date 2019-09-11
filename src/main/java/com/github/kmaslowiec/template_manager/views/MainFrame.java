@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.github.kmaslowiec.template_manager.common.ClipBoardMng;
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.common.WordConverter;
@@ -18,11 +19,16 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.DefaultListCellRenderer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -37,6 +43,7 @@ public class MainFrame extends JFrame {
 	private File chosenFile;
 	private WordConverter convert;
 	private List<Template> templates;
+	private ClipBoardMng board;
 
 	/**
 	 * Launch the application.
@@ -58,56 +65,72 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
+		board = new ClipBoardMng();
 		openFile = new OpenFile();
 		convert = new WordConverter();
 		templates = new ArrayList<>();
-		
+
 		initComponents();
 		createEvents();
-		
-		if(convert.isListExist(WordConverter.RESOURCE_PATH + "templates")) {
-			templates = convert.deserializeArrayList();
+
+		if (convert.isListExist(WordConverter.RESOURCE_PATH + "saved_templates/templates")) {
+			templates = convert.deserializeArrayList("saved_templates/templates");
 			model.addAll(templates);
 		}
 	}
-	
+
 	private void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		
+
 		model = new DefaultListModel<Template>();
-		list = new JList<Template>(model);
-		setupDefaultJListRenderer(list);
-		
+
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
+
 		mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-		
-		mntmAddTemplate = new JMenuItem("Add template");	
+
+		mntmAddTemplate = new JMenuItem("Add template");
 		mnFile.add(mntmAddTemplate);
 		mntmAddElement = new JMenuItem("Save templates");
-		
-		
+
 		mnFile.add(mntmAddElement);
-		
+
 		scrollPane = new JScrollPane();
-		scrollPane.setViewportView(list);
-		
+		list = new JList<Template>(model);
+		setupDefaultJListRenderer(list);
+
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(list, GroupLayout.PREFERRED_SIZE, 411, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
+						.addComponent(list, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
 		initGroupLayout(groupLayout);
-		
+
 		getContentPane().setLayout(groupLayout);
 	}
-	
+
 	private void createEvents() {
 		addTemplateEvent();
-		addElementEvent();
+		saveTemplates();
 		templateClickedEvent();
-
 	}
-	
+
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			chosenFile = openFile.pickMe();
@@ -116,19 +139,22 @@ public class MainFrame extends JFrame {
 			model.addElement(temp);
 		});
 	}
-	
-	private void addElementEvent() {
+
+	private void saveTemplates() {
 		mntmAddElement.addActionListener(a -> {
 			model.removeAllElements();
-			model.addAll(templates);
-			convert.serializeArrayList(templates);
+			if (templates != null) {
+				model.addAll(templates);
+				convert.serializeArrayList(templates, "saved_templates/templates");
+			}
 		});
 	}
-	
+
 	private void templateClickedEvent() {
-		list.addListSelectionListener(a->{
-			if(!a.getValueIsAdjusting()) {
-				System.out.println(list.getSelectedValue().getContent());
+		list.addListSelectionListener(a -> {
+			if (!a.getValueIsAdjusting()) {
+				//System.out.println(list.getSelectedValue().getContent());
+				board.copyToClipboard(list.getSelectedValue().getContent());			
 			}
 		});
 	}
@@ -140,30 +166,15 @@ public class MainFrame extends JFrame {
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 				Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if(renderer instanceof JLabel && value instanceof Template ) {
-					((JLabel) renderer).setText(((Template)value).getFileName());
+				if (renderer instanceof JLabel && value instanceof Template) {
+					((JLabel) renderer).setText(((Template) value).getFileName());
 				}
-				
-				return renderer; 
-			}	
+
+				return renderer;
+			}
 		});
 	}
 
 	private void initGroupLayout(GroupLayout groupLayout) {
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.TRAILING)
-					.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(13, Short.MAX_VALUE))
-			);
-			groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-					.addGroup(groupLayout.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-			);
 	}
-
 }
