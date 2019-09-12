@@ -139,13 +139,10 @@ public class MainFrame extends JFrame {
 				 Template temp = convert.parseDoc(i);
 				 templates.add(temp); 
 			 }
+			 model.removeAllElements();
 			 model.addAll(templates);		
 		});
 		
-		/*
-		 * chosenFile = openFile.pickMe(); Template temp = convert.parseDoc(chosenFile);
-		 * templates.add(temp); model.addElement(temp);
-		 */
 	}
 
 	private void saveTemplates() {
