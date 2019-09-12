@@ -81,7 +81,7 @@ public class MainFrame extends JFrame {
 
 	private void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 461, 312);
 
 		model = new DefaultListModel<Template>();
 
@@ -98,29 +98,25 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmAddElement);
 
 		scrollPane = new JScrollPane();
-		list = new JList<Template>(model);
-		setupDefaultJListRenderer(list);
 
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(list, GroupLayout.PREFERRED_SIZE, 411, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 425, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
+					.addGap(10))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE)
-						.addComponent(list, GroupLayout.PREFERRED_SIZE, 217, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+					.addGap(13))
 		);
-		initGroupLayout(groupLayout);
+		list = new JList<Template>(model);
+		scrollPane.setViewportView(list);
+		setupDefaultJListRenderer(list);
 
 		getContentPane().setLayout(groupLayout);
 	}
@@ -179,6 +175,4 @@ public class MainFrame extends JFrame {
 		});
 	}
 
-	private void initGroupLayout(GroupLayout groupLayout) {
-	}
 }
