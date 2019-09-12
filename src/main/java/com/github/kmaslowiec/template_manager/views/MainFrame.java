@@ -132,12 +132,17 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addTemplateEvent() {
-		mntmAddTemplate.addActionListener(a -> {
-			chosenFile = openFile.pickMe();
-			Template temp = convert.parseDoc(chosenFile);
-			templates.add(temp);
-			model.addElement(temp);
+		mntmAddTemplate.addActionListener(a -> {	
+			 File[] files = openFile.pickMany();
+			 
+			 for(File i:files) {
+				 Template temp = convert.parseDoc(i);
+				 templates.add(temp); 
+			 }
+			 model.removeAllElements();
+			 model.addAll(templates);		
 		});
+		
 	}
 
 	private void saveTemplates() {
@@ -153,7 +158,6 @@ public class MainFrame extends JFrame {
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a -> {
 			if (!a.getValueIsAdjusting()) {
-				//System.out.println(list.getSelectedValue().getContent());
 				board.copyToClipboard(list.getSelectedValue().getContent());			
 			}
 		});
