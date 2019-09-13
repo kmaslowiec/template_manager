@@ -15,6 +15,6 @@ public class LogicTester {
 	public static void main(String[] args) {
 		MySearch ser = new MySearch();
 		
-		ser.search(new ArrayList<>(), "NoN");
+		ser.searchJ8(new ArrayList<>(), "NoN");
 	  }
 }

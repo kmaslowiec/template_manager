@@ -2,7 +2,9 @@ package com.github.kmaslowiec.template_manager.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.xml.transform.Templates;
 
@@ -16,12 +18,22 @@ public class MySearch {
 		List<Template> results = new ArrayList<>();
 		list=this.list;
 		for(Template i : list) {
-			//System.out.printf("word a: %s word b %s \n", i.getFileName().toLowerCase().replaceAll("\\s", ""),  word.toLowerCase().strip());
-			
 			if(i.getFileName().toLowerCase().replaceAll("\\s", "").contains(word.toLowerCase().trim())) {
 				results.add(i);
 			}
 		}
+		
+		System.out.println(results.toString());
+		return results;
+	}
+	
+	public List<Template> searchJ8(List<Template> list, String word) {
+		List<Template> results = new ArrayList<>();
+		list=this.list;
+		results = list.stream()
+				.filter(a -> a.getFileName().toLowerCase().replaceAll("\\s", "")
+				.contains(word.toLowerCase().trim()))
+				.collect(Collectors.toList());
 		
 		System.out.println(results.toString());
 		return results;
