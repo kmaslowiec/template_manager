@@ -13,8 +13,6 @@ import java.util.ArrayList;
 public class LogicTester {
 
 	public static void main(String[] args) {
-		MySearch ser = new MySearch();
-		
-		ser.searchJ8(new ArrayList<>(), "NoN");
+	
 	  }
 }

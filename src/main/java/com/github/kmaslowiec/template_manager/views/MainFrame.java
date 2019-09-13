@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import com.github.kmaslowiec.template_manager.common.ClipBoardMng;
+import com.github.kmaslowiec.template_manager.common.MySearch;
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.common.WordConverter;
@@ -189,9 +190,9 @@ public class MainFrame extends JFrame {
 	private void searchEngineEvent() {
 		textFieldSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(textFieldSearch.getText());
-				
-				
+					List<Template> result = MySearch.search(templates, textFieldSearch.getText());
+					model.removeAllElements();
+					model.addAll(result);	
 			}
 		});
 	}
