@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import com.github.kmaslowiec.template_manager.common.ClipBoardMng;
+import com.github.kmaslowiec.template_manager.common.MySearch;
 import com.github.kmaslowiec.template_manager.common.OpenFile;
 import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.common.WordConverter;
@@ -29,6 +30,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -44,6 +49,7 @@ public class MainFrame extends JFrame {
 	private WordConverter convert;
 	private List<Template> templates;
 	private ClipBoardMng board;
+	private JTextField textFieldSearch;
 
 	/**
 	 * Launch the application.
@@ -81,7 +87,7 @@ public class MainFrame extends JFrame {
 
 	private void initComponents() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 461, 312);
+		setBounds(100, 100, 444, 666);
 
 		model = new DefaultListModel<Template>();
 
@@ -98,21 +104,26 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmAddElement);
 
 		scrollPane = new JScrollPane();
-
+		
+		textFieldSearch = new JTextField();
+		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
-					.addGap(10))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(textFieldSearch, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-					.addGap(13))
+					.addComponent(textFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 537, GroupLayout.PREFERRED_SIZE))
 		);
 		list = new JList<Template>(model);
 		scrollPane.setViewportView(list);
@@ -123,8 +134,9 @@ public class MainFrame extends JFrame {
 
 	private void createEvents() {
 		addTemplateEvent();
-		saveTemplates();
+		saveTemplatesEvent();
 		templateClickedEvent();
+		searchEngineEvent();
 	}
 
 	private void addTemplateEvent() {
@@ -141,7 +153,7 @@ public class MainFrame extends JFrame {
 		
 	}
 
-	private void saveTemplates() {
+	private void saveTemplatesEvent() {
 		mntmAddElement.addActionListener(a -> {
 			model.removeAllElements();
 			if (templates != null) {
@@ -174,5 +186,14 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
-
+	
+	private void searchEngineEvent() {
+		textFieldSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					List<Template> result = MySearch.search(templates, textFieldSearch.getText());
+					model.removeAllElements();
+					model.addAll(result);	
+			}
+		});
+	}
 }
