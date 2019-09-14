@@ -104,27 +104,22 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmAddElement);
 
 		scrollPane = new JScrollPane();
-		
+
 		textFieldSearch = new JTextField();
-		
+
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
+				.createSequentialGroup().addContainerGap()
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(textFieldSearch, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
 						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 408, Short.MAX_VALUE))
-					.addContainerGap())
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(textFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 537, GroupLayout.PREFERRED_SIZE))
-		);
+				.addContainerGap()));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup().addContainerGap()
+						.addComponent(textFieldSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 537, GroupLayout.PREFERRED_SIZE)));
 		list = new JList<Template>(model);
 		scrollPane.setViewportView(list);
 		setupDefaultJListRenderer(list);
@@ -140,17 +135,17 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addTemplateEvent() {
-		mntmAddTemplate.addActionListener(a -> {	
-			 File[] files = openFile.pickMany();
-			 
-			 for(File i:files) {
-				 Template temp = convert.parseDoc(i);
-				 templates.add(temp); 
-			 }
-			 model.removeAllElements();
-			 model.addAll(templates);		
+		mntmAddTemplate.addActionListener(a -> {
+			File[] files = openFile.pickMany();
+
+			for (File i : files) {
+				Template temp = convert.parseDoc(i);
+				templates.add(temp);
+			}
+			model.removeAllElements();
+			model.addAll(templates);
 		});
-		
+
 	}
 
 	private void saveTemplatesEvent() {
@@ -165,8 +160,8 @@ public class MainFrame extends JFrame {
 
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a -> {
-			if (!a.getValueIsAdjusting()) {
-				board.copyToClipboard(list.getSelectedValue().getContent());			
+			if (a.getValueIsAdjusting()) {
+				board.copyToClipboard(list.getSelectedValue().getContent());	
 			}
 		});
 	}
@@ -186,13 +181,13 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
-	
+
 	private void searchEngineEvent() {
 		textFieldSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					List<Template> result = MySearch.search(templates, textFieldSearch.getText());
-					model.removeAllElements();
-					model.addAll(result);	
+				List<Template> result = MySearch.search(templates, textFieldSearch.getText());
+				model.removeAllElements();
+				model.addAll(result);
 			}
 		});
 	}
