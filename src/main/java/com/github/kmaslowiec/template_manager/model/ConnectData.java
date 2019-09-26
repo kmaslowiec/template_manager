@@ -11,9 +11,9 @@ import java.util.Map;
 import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
 
-public class ParseData {
+public class ConnectData {
 	
-	public void serializeArrayList(Map<String, Template> templates, String baseName) {
+	public void saveToFile(Map<String, Template> templates, String baseName) {
         try
         {
             FileOutputStream fos = new FileOutputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName);
@@ -28,7 +28,7 @@ public class ParseData {
         }
 	}
 	
-	public Map<String, Template> deserializeArrayList(String baseName){
+	public Map<String, Template> loadFromFile(String baseName){
 		Map<String, Template> templates = new HashMap<>();
         
         try

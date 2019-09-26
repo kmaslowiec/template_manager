@@ -5,7 +5,7 @@ import com.github.kmaslowiec.template_manager.common.Template;
 public class ObjectFactory {
 	
 	
-	public static Template Template_name_content() {
+	public static Template Template() {
 		return Template.builder().fileName(MyStringUtils.FILE_NAME).content(MyStringUtils.CONTENT).build();
 	}
 	
