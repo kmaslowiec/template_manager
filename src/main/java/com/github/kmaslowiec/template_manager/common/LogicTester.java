@@ -26,8 +26,7 @@ public class LogicTester {
 		 */
 		
 		TemplateDaoImpl test = new TemplateDaoImpl();
-		test.save(ObjectFactory.Template_name_content("inne", "Test dao"));
-			
-	 
+		//test.save(ObjectFactory.Template_name_content("inne", "Test dao"));
+		test.find(ObjectFactory.Template_name_content("inuiihji", "Test dao"));
 	}
 }
