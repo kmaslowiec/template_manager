@@ -1,5 +1,13 @@
 package com.github.kmaslowiec.template_manager.model;
 
-public interface TemplateDao {
+import com.github.kmaslowiec.template_manager.common.Template;
+
+import lombok.extern.slf4j.Slf4j;
+
+interface TemplateDao {
+	
+	public boolean save(Template temp);
+	public void delete(Template temp);
+	public Template find(Template temp);
 
 }
