@@ -11,6 +11,7 @@ import lombok.Data;
 @Builder
 public class Template implements Serializable {
 	
-	private String fileName;
+	private final String fileName;
+	private String tempName;
 	private String content;
 }

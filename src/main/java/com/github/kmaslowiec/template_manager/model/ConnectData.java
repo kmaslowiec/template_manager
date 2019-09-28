@@ -11,7 +11,7 @@ import java.util.Map;
 import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
 
-public class ConnectData {
+class ConnectData {
 	
 	public void saveToFile(Map<String, Template> templates, String baseName) {
         try

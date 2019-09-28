@@ -3,7 +3,6 @@ package com.github.kmaslowiec.template_manager.common;
 import java.util.Arrays;
 import java.util.Map;
 
-import com.github.kmaslowiec.template_manager.model.ConnectData;
 import com.github.kmaslowiec.template_manager.model.TemplateDaoImpl;
 import com.github.kmaslowiec.template_manager.utils.CollectionFactory;
 import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
@@ -27,6 +26,8 @@ public class LogicTester {
 		
 		TemplateDaoImpl test = new TemplateDaoImpl();
 		//test.save(ObjectFactory.Template_name_content("inne", "Test dao"));
-		test.find(ObjectFactory.Template_name_content("inuiihji", "Test dao"));
+		boolean a = test.delete(ObjectFactory.Template_name_content("inne", "hello"));
+		
+		System.out.println(a);
 	}
 }

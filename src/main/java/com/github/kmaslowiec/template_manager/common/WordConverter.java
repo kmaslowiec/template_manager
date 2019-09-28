@@ -12,6 +12,8 @@ import java.util.List;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
+import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
+
 public class WordConverter {
 
 	public static final String RESOURCE_PATH = "./src/main/java/com/github/kmaslowiec/template_manager/resources/";
@@ -24,7 +26,7 @@ public class WordConverter {
 			FileInputStream fis = new FileInputStream(path);
 			XWPFWordExtractor we = new XWPFWordExtractor(new XWPFDocument(fis));
 			String text = we.getText();
-			Template temp = new Template(fileTitle(path.getName()), text);
+			Template temp = new Template(fileTitle(path.getName()), fileTitle(path.getName()),  text);
 			we.close();
 			return temp;
 			
@@ -32,7 +34,7 @@ public class WordConverter {
 			System.out.println(exep);
 			
 		}
-		return new Template("", "");
+		return ObjectFactory.Template_empty();
 	}
 	
 	private String fileTitle(String name) {
