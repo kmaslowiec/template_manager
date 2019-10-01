@@ -6,11 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.github.kmaslowiec.template_manager.common.ClipBoardMng;
-import com.github.kmaslowiec.template_manager.common.MySearch;
-import com.github.kmaslowiec.template_manager.common.OpenFile;
-import com.github.kmaslowiec.template_manager.common.Template;
-import com.github.kmaslowiec.template_manager.common.WordConverter;
+import com.github.kmaslowiec.template_manager.model.Template;
+import com.github.kmaslowiec.template_manager.presenter.Presenter;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -46,9 +43,9 @@ public class MainFrame extends JFrame {
 	private DefaultListModel<Template> model;
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
-	private WordConverter convert;
+	//private WordConverter convert;
 	private List<Template> templates;
-	private ClipBoardMng board;
+	private Presenter presenter;
 	private JTextField textFieldSearch;
 
 	/**
@@ -71,18 +68,20 @@ public class MainFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		board = new ClipBoardMng();
-		openFile = new OpenFile();
-		convert = new WordConverter();
-		templates = new ArrayList<>();
 
+		openFile = new OpenFile();
+		//convert = new WordConverter();
+		templates = new ArrayList<>();
+		presenter = new Presenter();
 		initComponents();
 		createEvents();
 
-		if (convert.isListExist(WordConverter.RESOURCE_PATH + "saved_templates/templates")) {
-			templates = convert.deserializeArrayList("saved_templates/templates");
-			model.addAll(templates);
-		}
+		/*
+		 * if (convert.isListExist(WordConverter.RESOURCE_PATH +
+		 * "saved_templates/templates")) { //templates =
+		 * convert.deserializeArrayList("saved_templates/templates");
+		 * model.addAll(templates); }
+		 */
 	}
 
 	private void initComponents() {
@@ -137,13 +136,11 @@ public class MainFrame extends JFrame {
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			File[] files = openFile.pickMany();
-
-			for (File i : files) {
-				Template temp = convert.parseDoc(i);
-				templates.add(temp);
-			}
-			model.removeAllElements();
-			model.addAll(templates);
+			presenter.parseAndSave(files);
+			/*
+			 * for (File i : files) { Template temp = convert.parseDoc(i);
+			 * templates.add(temp); } model.removeAllElements(); model.addAll(templates);
+			 */
 		});
 
 	}
@@ -153,16 +150,17 @@ public class MainFrame extends JFrame {
 			model.removeAllElements();
 			if (templates != null) {
 				model.addAll(templates);
-				convert.serializeArrayList(templates, "saved_templates/templates");
+				//convert.serializeArrayList(templates, "saved_templates/templates");
 			}
 		});
 	}
 
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a -> {
-			if (a.getValueIsAdjusting()) {
-				board.copyToClipboard(list.getSelectedValue().getContent());	
-			}
+			/*
+			 * if (a.getValueIsAdjusting()) {
+			 * board.copyToClipboard(list.getSelectedValue().getContent()); }
+			 */
 		});
 	}
 
@@ -185,9 +183,10 @@ public class MainFrame extends JFrame {
 	private void searchEngineEvent() {
 		textFieldSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Template> result = MySearch.search(templates, textFieldSearch.getText());
-				model.removeAllElements();
-				model.addAll(result);
+				/*
+				 * List<Template> result = MySearch.search(templates,
+				 * textFieldSearch.getText()); model.removeAllElements(); model.addAll(result);
+				 */
 			}
 		});
 	}

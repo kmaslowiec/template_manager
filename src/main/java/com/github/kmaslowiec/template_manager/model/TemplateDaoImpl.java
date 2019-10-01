@@ -1,12 +1,8 @@
 package com.github.kmaslowiec.template_manager.model;
 
-import java.lang.System.Logger;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
-import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 
 import lombok.extern.java.Log;
@@ -22,7 +18,6 @@ public class TemplateDaoImpl implements TemplateDao {
 
 	@Override
 	public boolean save(Template temp) {
-
 		Map<String, Template> map = data.loadFromFile("dupa");
 		if (exists(temp)) {
 			log.info(String.format("SAVE: Template  %s already exists.", temp.getFileName()));
@@ -73,9 +68,7 @@ public class TemplateDaoImpl implements TemplateDao {
 		Map<String, Template> map = data.loadFromFile("dupa");
 
 		if (exists(temp)) {
-			System.out.println("before " + map.toString());
 			map.remove(temp.getFileName());
-			System.out.println("after " + map.toString());
 			data.saveToFile(map, "dupa");
 
 			log.info(String.format("DELETE: Template  %s has been deleted.", temp.getFileName()));
@@ -97,5 +90,4 @@ public class TemplateDaoImpl implements TemplateDao {
 
 		return (map.containsKey(temp.getFileName()));
 	}
-
 }

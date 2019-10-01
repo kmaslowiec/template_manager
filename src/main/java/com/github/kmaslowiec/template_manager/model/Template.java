@@ -1,4 +1,4 @@
-package com.github.kmaslowiec.template_manager.common;
+package com.github.kmaslowiec.template_manager.model;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package com.github.kmaslowiec.template_manager.common;
+package com.github.kmaslowiec.template_manager.views;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,24 +13,21 @@ public class OpenFile {
 	
 	JFileChooser fileChooser;
 	
-	public File pickMe() {
-		File file = new File("");
-		WordConverter read = new WordConverter();
-		fileChooser = new JFileChooser();
-		FileFilter filter = new FileNameExtensionFilter("Word files", "docx");
-		fileChooser.addChoosableFileFilter(filter);
-		
-		if(fileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) {			
-			file = fileChooser.getSelectedFile();
-			System.out.print(file.toString());
-		}
-		return file;
-	}
+	/*
+	 * public File pickMe() { File file = new File(""); WordConverter read = new
+	 * WordConverter(); fileChooser = new JFileChooser(); FileFilter filter = new
+	 * FileNameExtensionFilter("Word files", "docx");
+	 * fileChooser.addChoosableFileFilter(filter);
+	 * 
+	 * if(fileChooser.showOpenDialog(null)==JFileChooser.APPROVE_OPTION) { file =
+	 * fileChooser.getSelectedFile(); System.out.print(file.toString()); } return
+	 * file; }
+	 */
 	
 	public File[] pickMany() {
 		File[] files = {};
 		
-		WordConverter read = new WordConverter();
+		//WordConverter read = new WordConverter();
 		fileChooser = new JFileChooser();
 		FileFilter filter = new FileNameExtensionFilter("Word files", "docx");
 		fileChooser.addChoosableFileFilter(filter);

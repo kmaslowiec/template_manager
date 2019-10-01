@@ -2,8 +2,6 @@ package com.github.kmaslowiec.template_manager.model;
 
 import java.util.List;
 
-import com.github.kmaslowiec.template_manager.common.Template;
-
 import lombok.extern.slf4j.Slf4j;
 
 interface TemplateDao {

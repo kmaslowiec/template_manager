@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.kmaslowiec.template_manager.common.Template;
 import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
 
 class ConnectData {
