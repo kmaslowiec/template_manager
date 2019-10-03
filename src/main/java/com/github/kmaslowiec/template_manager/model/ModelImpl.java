@@ -8,11 +8,11 @@ import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 import lombok.extern.java.Log;
 
 @Log
-public class TemplateDaoImpl implements TemplateDao {
+public class ModelImpl implements Model {
 
 	private ConnectData data;
 
-	public TemplateDaoImpl() {
+	public ModelImpl() {
 		data = new ConnectData();
 	}
 

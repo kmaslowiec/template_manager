@@ -6,8 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.github.kmaslowiec.template_manager.controller.Controller;
+import com.github.kmaslowiec.template_manager.model.ModelImpl;
 import com.github.kmaslowiec.template_manager.model.Template;
-import com.github.kmaslowiec.template_manager.presenter.Presenter;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -33,31 +34,32 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame {
+public class View extends JFrame {
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
 	private OpenFile openFile;
 	private JScrollPane scrollPane;
 	private JList<Template> list;
-	private DefaultListModel<Template> model;
+	private DefaultListModel<Template> listModel;
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
 	//private WordConverter convert;
 	private List<Template> templates;
-	private Presenter presenter;
+	private Controller presenter;
 	private JTextField textFieldSearch;
-
+	private ModelImpl model;
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame() {
+	public View() {
 
 		openFile = new OpenFile();
 		//convert = new WordConverter();
 		templates = new ArrayList<>();
-		presenter = new Presenter();
+		presenter = new Controller();
 		initComponents();
 		createEvents();
 
@@ -73,7 +75,7 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 444, 666);
 
-		model = new DefaultListModel<Template>();
+		listModel = new DefaultListModel<Template>();
 
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -104,7 +106,7 @@ public class MainFrame extends JFrame {
 								GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
 						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 537, GroupLayout.PREFERRED_SIZE)));
-		list = new JList<Template>(model);
+		list = new JList<Template>(listModel);
 		scrollPane.setViewportView(list);
 		setupDefaultJListRenderer(list);
 
@@ -132,9 +134,9 @@ public class MainFrame extends JFrame {
 
 	private void saveTemplatesEvent() {
 		mntmAddElement.addActionListener(a -> {
-			model.removeAllElements();
+			listModel.removeAllElements();
 			if (templates != null) {
-				model.addAll(templates);
+				listModel.addAll(templates);
 				//convert.serializeArrayList(templates, "saved_templates/templates");
 			}
 		});

@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
-interface TemplateDao {
+interface Model {
 	
 	public boolean save(Template temp);
 	public boolean update(Template temp);

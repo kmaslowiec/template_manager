@@ -1,4 +1,4 @@
-package com.github.kmaslowiec.template_manager.presenter;
+package com.github.kmaslowiec.template_manager.controller;
 
 import java.io.File;
 import java.io.FileInputStream;

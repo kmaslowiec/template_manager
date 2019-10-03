@@ -1,6 +1,5 @@
-package com.github.kmaslowiec.template_manager.presenter;
+package com.github.kmaslowiec.template_manager.controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
