@@ -2,6 +2,7 @@ package com.github.kmaslowiec.template_manager.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,17 +22,21 @@ class WordConverter {
 	 * Read from the docx and parse to txt
 	 */
 	public Template parseFromDocx(File path) {
+		
+
 		try {
 			FileInputStream fis = new FileInputStream(path);
 			XWPFWordExtractor we = new XWPFWordExtractor(new XWPFDocument(fis));
-			String text = we.getText();
+			String text = we.getText().isEmpty() ? "" : we.getText();
 			Template temp = new Template(fileTitle(path.getName()), fileTitle(path.getName()),  text);
 			we.close();
-			return temp;
-			
-		} catch (Exception exep) {
-			System.out.println(exep);
-			
+			return temp;	
+		} catch(FileNotFoundException e) {
+			e.printStackTrace();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}catch(org.apache.poi.EmptyFileException e) {
+			return new Template(fileTitle(path.getName()), fileTitle(path.getName()), "");
 		}
 		return ObjectFactory.Template_empty();
 	}

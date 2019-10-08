@@ -11,12 +11,10 @@ public class Application {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				//try {
-					View frame = new View();
-					frame.setVisible(true);
-			/*	} catch (Exception e) {
-					e.printStackTrace();
-				}*/
+				runApp();
+				
+				
+				
 			}
 		});
 	}
@@ -28,6 +26,7 @@ public class Application {
 		ModelImpl model = new ModelImpl();
 		View view = new View();
 		Controller controller = new Controller(model, view);
-	}
+		view.setTemplateSaveListener(controller);
+	}	
 }
 	

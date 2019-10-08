@@ -6,7 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.github.kmaslowiec.template_manager.ListenersSetup;
 import com.github.kmaslowiec.template_manager.controller.Controller;
+import com.github.kmaslowiec.template_manager.controller.TemplateSaveListener;
 import com.github.kmaslowiec.template_manager.model.ModelImpl;
 import com.github.kmaslowiec.template_manager.model.Template;
 
@@ -34,7 +36,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
-public class View extends JFrame {
+public class View extends JFrame implements ListenersSetup{
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
@@ -44,11 +46,11 @@ public class View extends JFrame {
 	private DefaultListModel<Template> listModel;
 	private JMenuItem mntmAddElement;
 	private File chosenFile;
-	//private WordConverter convert;
 	private List<Template> templates;
 	private Controller presenter;
 	private JTextField textFieldSearch;
-	private ModelImpl model;
+	private TemplateSaveListener tempSaveListener;
+	
 	
 
 	/**
@@ -59,7 +61,6 @@ public class View extends JFrame {
 		openFile = new OpenFile();
 		//convert = new WordConverter();
 		templates = new ArrayList<>();
-		presenter = new Controller();
 		initComponents();
 		createEvents();
 
@@ -72,6 +73,8 @@ public class View extends JFrame {
 	}
 
 	private void initComponents() {
+		
+		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 444, 666);
 
@@ -123,7 +126,9 @@ public class View extends JFrame {
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			File[] files = openFile.pickMany();
-			presenter.parseAndSave(files);
+			
+			fireTemplateSaveEvent(files);
+			//presenter.parseAndSave(files);
 			/*
 			 * for (File i : files) { Template temp = convert.parseDoc(i);
 			 * templates.add(temp); } model.removeAllElements(); model.addAll(templates);
@@ -176,5 +181,18 @@ public class View extends JFrame {
 				 */
 			}
 		});
+	}
+
+	@Override
+	public void setTemplateSaveListener(TemplateSaveListener listener) {
+		this.tempSaveListener = listener;
+		
+	}
+
+	@Override
+	public void fireTemplateSaveEvent(File[] files) {
+		if(tempSaveListener != null) {
+			tempSaveListener.saveTemplatePerformed(files);
+		}
 	}
 }
