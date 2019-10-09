@@ -6,4 +6,4 @@ Design patters training.
 
 # App schema:
 
-![app schema]("https://github.com/kmaslowiec/template_manager/blob/master/app_schema_web.jpg")
+![app schema](https://github.com/kmaslowiec/template_manager/blob/master/app_schema_web.jpg)
