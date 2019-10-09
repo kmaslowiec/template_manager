@@ -6,4 +6,4 @@ Design patters training.
 
 # App schema:
 
-
+![app schema]./app_schema.png")
