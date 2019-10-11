@@ -1,10 +1,10 @@
-package com.github.kmaslowiec.template_manager.controller;
+package com.github.kmaslowiec.template_manager.service;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 
-class ClipBoardMng {
+public class ClipBoardMng {
 	
 	public void copyToClipboard(String content) {
 		StringSelection selection = new StringSelection(content);

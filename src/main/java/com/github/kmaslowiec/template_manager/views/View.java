@@ -1,16 +1,11 @@
 package com.github.kmaslowiec.template_manager.views;
 
 import java.awt.Component;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import com.github.kmaslowiec.template_manager.ListenersSetup;
-import com.github.kmaslowiec.template_manager.controller.Controller;
-import com.github.kmaslowiec.template_manager.controller.TemplateSaveListener;
-import com.github.kmaslowiec.template_manager.model.ModelImpl;
-import com.github.kmaslowiec.template_manager.model.Template;
+import com.github.kmaslowiec.template_manager.controller.TemplateController;
+import com.github.kmaslowiec.template_manager.service.entity.Template;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -20,23 +15,22 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import javax.swing.DefaultListCellRenderer;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-@SuppressWarnings("serial")
-public class View extends JFrame implements ListenersSetup{
+public class View extends JFrame {
+
+	private static final long serialVersionUID = -1663198732967801518L;
+
+	private TemplateController controller;
+
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
@@ -45,36 +39,22 @@ public class View extends JFrame implements ListenersSetup{
 	private JList<Template> list;
 	private DefaultListModel<Template> listModel;
 	private JMenuItem mntmAddElement;
-	private File chosenFile;
 	private List<Template> templates;
-	private Controller presenter;
 	private JTextField textFieldSearch;
-	private TemplateSaveListener tempSaveListener;
-	
-	
 
 	/**
 	 * Create the frame.
 	 */
 	public View() {
 
+		controller = new TemplateController();
 		openFile = new OpenFile();
-		//convert = new WordConverter();
 		templates = new ArrayList<>();
 		initComponents();
 		createEvents();
-
-		/*
-		 * if (convert.isListExist(WordConverter.RESOURCE_PATH +
-		 * "saved_templates/templates")) { //templates =
-		 * convert.deserializeArrayList("saved_templates/templates");
-		 * model.addAll(templates); }
-		 */
 	}
 
 	private void initComponents() {
-		
-		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 444, 666);
 
@@ -126,13 +106,7 @@ public class View extends JFrame implements ListenersSetup{
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			File[] files = openFile.pickMany();
-			
-			fireTemplateSaveEvent(files);
-			//presenter.parseAndSave(files);
-			/*
-			 * for (File i : files) { Template temp = convert.parseDoc(i);
-			 * templates.add(temp); } model.removeAllElements(); model.addAll(templates);
-			 */
+			controller.save(files);
 		});
 
 	}
@@ -142,22 +116,20 @@ public class View extends JFrame implements ListenersSetup{
 			listModel.removeAllElements();
 			if (templates != null) {
 				listModel.addAll(templates);
-				//convert.serializeArrayList(templates, "saved_templates/templates");
 			}
 		});
 	}
 
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a -> {
-			/*
-			 * if (a.getValueIsAdjusting()) {
-			 * board.copyToClipboard(list.getSelectedValue().getContent()); }
-			 */
+
 		});
 	}
 
 	private void setupDefaultJListRenderer(JList<Template> list) {
 		list.setCellRenderer(new DefaultListCellRenderer() {
+
+			private static final long serialVersionUID = 6617942138437985158L;
 
 			@Override
 			public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
@@ -175,24 +147,8 @@ public class View extends JFrame implements ListenersSetup{
 	private void searchEngineEvent() {
 		textFieldSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*
-				 * List<Template> result = MySearch.search(templates,
-				 * textFieldSearch.getText()); model.removeAllElements(); model.addAll(result);
-				 */
+
 			}
 		});
-	}
-
-	@Override
-	public void setTemplateSaveListener(TemplateSaveListener listener) {
-		this.tempSaveListener = listener;
-		
-	}
-
-	@Override
-	public void fireTemplateSaveEvent(File[] files) {
-		if(tempSaveListener != null) {
-			tempSaveListener.saveTemplatePerformed(files);
-		}
 	}
 }

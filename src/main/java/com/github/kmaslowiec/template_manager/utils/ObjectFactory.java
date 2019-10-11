@@ -1,6 +1,6 @@
 package com.github.kmaslowiec.template_manager.utils;
 
-import com.github.kmaslowiec.template_manager.model.Template;
+import com.github.kmaslowiec.template_manager.service.entity.Template;
 
 public class ObjectFactory {
 	

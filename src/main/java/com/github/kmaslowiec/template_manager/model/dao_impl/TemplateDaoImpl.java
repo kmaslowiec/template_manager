@@ -1,33 +1,42 @@
-package com.github.kmaslowiec.template_manager.model;
+package com.github.kmaslowiec.template_manager.model.dao_impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.github.kmaslowiec.template_manager.model.TemplateDao;
+import com.github.kmaslowiec.template_manager.model.ConnectData;
+import com.github.kmaslowiec.template_manager.service.entity.Template;
 import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 
 import lombok.extern.java.Log;
 
 @Log
-public class ModelImpl implements Model {
+public class TemplateDaoImpl implements TemplateDao {
 
 	private ConnectData data;
+	private String saveFileName = "dupa2";
 
-	public ModelImpl() {
+	public TemplateDaoImpl() {
 		data = new ConnectData();
 	}
 
 	@Override
 	public boolean save(Template temp) {
-		Map<String, Template> map = data.loadFromFile("dupa");
+		Map<String, Template> map = new HashMap<>();
 		if (exists(temp)) {
 			log.info(String.format("SAVE: Template  %s already exists.", temp.getFileName()));
 			return false;
 		} else {
+			map = data.loadFromFile(saveFileName);
 			map.put(temp.getFileName(), temp);
-			data.saveToFile(map, "dupa");
+			data.saveToFile(map, saveFileName);
 		}
 		log.info(String.format("SAVE: Template  %s saved.", temp.getFileName()));
 		return exists(temp);
+		//TODO clears the list and save the new. Not intendent
 	}
 
 	@Override
@@ -47,7 +56,7 @@ public class ModelImpl implements Model {
 
 	@Override
 	public boolean update(Template temp) {
-		Map<String, Template> map = data.loadFromFile("dupa");
+		Map<String, Template> map = data.loadFromFile(saveFileName);
 
 		if (exists(temp)) {
 			map.replace(temp.getFileName(), temp);
@@ -65,11 +74,11 @@ public class ModelImpl implements Model {
 
 	@Override
 	public boolean delete(Template temp) {
-		Map<String, Template> map = data.loadFromFile("dupa");
+		Map<String, Template> map = data.loadFromFile(saveFileName);
 
 		if (exists(temp)) {
 			map.remove(temp.getFileName());
-			data.saveToFile(map, "dupa");
+			data.saveToFile(map, saveFileName);
 
 			log.info(String.format("DELETE: Template  %s has been deleted.", temp.getFileName()));
 		} else {
@@ -82,11 +91,13 @@ public class ModelImpl implements Model {
 
 	@Override
 	public List<Template> getAll() {
-		return (List<Template>) data.loadFromFile("dupa").values();
+		Map<String, Template> map = data.loadFromFile(saveFileName);
+		Collection<Template> temps = map.values();
+		return new ArrayList<Template>(temps);
 	}
 
 	private boolean exists(Template temp) {
-		Map<String, Template> map = data.loadFromFile("dupa");
+		Map<String, Template> map = data.loadFromFile(saveFileName);
 
 		return (map.containsKey(temp.getFileName()));
 	}
