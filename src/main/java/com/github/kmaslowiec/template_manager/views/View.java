@@ -106,7 +106,7 @@ public class View extends JFrame {
 	private void addTemplateEvent() {
 		mntmAddTemplate.addActionListener(a -> {
 			File[] files = openFile.pickMany();
-			controller.save(files);
+			controller.create(files);
 		});
 
 	}

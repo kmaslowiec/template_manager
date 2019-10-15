@@ -17,7 +17,7 @@ import lombok.extern.java.Log;
 public class TemplateDaoImpl implements TemplateDao {
 
 	private ConnectData data;
-	private String saveFileName = "dupa2";
+	private String saveFileName = "dupa7";
 
 	public TemplateDaoImpl() {
 		data = new ConnectData();
@@ -26,7 +26,7 @@ public class TemplateDaoImpl implements TemplateDao {
 	@Override
 	public boolean save(Template temp) {
 		Map<String, Template> map = new HashMap<>();
-		if (exists(temp)) {
+		if (templateExists(temp)) {
 			log.info(String.format("SAVE: Template  %s already exists.", temp.getFileName()));
 			return false;
 		} else {
@@ -35,16 +35,15 @@ public class TemplateDaoImpl implements TemplateDao {
 			data.saveToFile(map, saveFileName);
 		}
 		log.info(String.format("SAVE: Template  %s saved.", temp.getFileName()));
-		return exists(temp);
-		//TODO clears the list and save the new. Not intendent
+		return templateExists(temp);
 	}
 
 	@Override
 	public Template find(Template temp) {
 		Template result = ObjectFactory.Template_empty();
 
-		Map<String, Template> map = data.loadFromFile("dupa");
-		if (exists(temp)) {
+		Map<String, Template> map = data.loadFromFile(saveFileName);
+		if (templateExists(temp)) {
 			log.info(String.format("READ: Template  %s found.", temp.getFileName()));
 			result = map.get(temp.getFileName());
 		} else {
@@ -53,21 +52,39 @@ public class TemplateDaoImpl implements TemplateDao {
 
 		return result;
 	}
+	
+	@Override
+	public boolean saveAll(List<Template> temps) {
+		Map<String, Template> map = data.loadFromFile(saveFileName);
+		if(map.isEmpty()) {
+			for(Template i : temps){
+				map.put(i.getFileName(), i);
+				data.saveToFile(map, saveFileName);
+			}
+		}else {
+			for(Template i : temps){
+				map.putIfAbsent(i.getFileName(), i);
+				data.saveToFile(map, saveFileName);
+			}
+		}
+		
+		return map.equals(data.loadFromFile(saveFileName));
+	}
 
 	@Override
 	public boolean update(Template temp) {
 		Map<String, Template> map = data.loadFromFile(saveFileName);
 
-		if (exists(temp)) {
+		if (templateExists(temp)) {
 			map.replace(temp.getFileName(), temp);
-			data.saveToFile(map, "dupa");
+			data.saveToFile(map, saveFileName);
 			log.info(String.format("UPDATE: Template  %s is updated.", temp.getFileName()));
 		} else {
 			log.info(String.format("UPDATE:  %s does not exist.", temp.getFileName()));
 			return false;
 		}
 
-		Map<String, Template> saved = data.loadFromFile("dupa");
+		Map<String, Template> saved = data.loadFromFile(saveFileName);
 		System.out.println(saved.toString());
 		return temp.getContent().contentEquals(saved.get(temp.getFileName()).getContent());
 	}
@@ -76,7 +93,7 @@ public class TemplateDaoImpl implements TemplateDao {
 	public boolean delete(Template temp) {
 		Map<String, Template> map = data.loadFromFile(saveFileName);
 
-		if (exists(temp)) {
+		if (templateExists(temp)) {
 			map.remove(temp.getFileName());
 			data.saveToFile(map, saveFileName);
 
@@ -86,19 +103,23 @@ public class TemplateDaoImpl implements TemplateDao {
 			return false;
 		}
 
-		return !exists(temp);
+		return !templateExists(temp);
 	}
 
 	@Override
 	public List<Template> getAll() {
 		Map<String, Template> map = data.loadFromFile(saveFileName);
+		System.out.println(saveFileName);
 		Collection<Template> temps = map.values();
 		return new ArrayList<Template>(temps);
 	}
 
-	private boolean exists(Template temp) {
+	private boolean templateExists(Template temp) {
 		Map<String, Template> map = data.loadFromFile(saveFileName);
 
 		return (map.containsKey(temp.getFileName()));
 	}
+	
+	
+
 }

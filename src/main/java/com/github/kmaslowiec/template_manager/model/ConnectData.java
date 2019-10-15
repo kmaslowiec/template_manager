@@ -1,6 +1,7 @@
 package com.github.kmaslowiec.template_manager.model;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,6 +12,9 @@ import java.util.Map;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
 
+import lombok.extern.java.Log;
+
+@Log
 public class ConnectData {
 
 	public void saveToFile(Map<String, Template> templates, String baseName) {
@@ -29,17 +33,17 @@ public class ConnectData {
 	public Map<String, Template> loadFromFile(String baseName) {
 		Map<String, Template> templates = new HashMap<>();
 
-		try (ObjectInputStream ois = new ObjectInputStream(
-				new FileInputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
-			if(ois.readObject() instanceof HashMap) {
-				templates = (HashMap<String, Template>) ois.readObject();
-			}
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} catch (ClassNotFoundException c) {
-			System.out.println("Class not found here");
+		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
+			templates = (HashMap<String, Template>) ois.readObject();	
+		}  catch (FileNotFoundException a){
+				log.info(String.format("File %s created by service", baseName));
+				return templates;
+		}
+		catch (ClassNotFoundException c) {
+			log.info(String.format("Class not s% found ", c.getClass().toString()));
 			c.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		return templates;

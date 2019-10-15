@@ -1,6 +1,8 @@
 package com.github.kmaslowiec.template_manager.service.impl;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.github.kmaslowiec.template_manager.model.dao_impl.TemplateDaoImpl;
 import com.github.kmaslowiec.template_manager.service.TemplateService;
@@ -19,9 +21,26 @@ public class TemplateServiceImpl implements TemplateService{
 
 	@Override
 	public boolean saveTemplate(File[] files) {
-		
 		Template template = parser.parseFromDocx(files[0]);
 		
 		return dao.save(template);
+	}
+
+	@Override
+	public boolean saveManyTemplates(File[] files) {
+		List<Template> temps = new ArrayList<>();
+		
+		for(File i : files) {
+			temps.add(parser.parseFromDocx(i));
+		}
+		
+		return dao.saveAll(temps);
+	}
+
+	@Override
+	public boolean updateTemplate(File[] files) {
+		Template template = parser.parseFromDocx(files[0]);
+		
+		return dao.update(template);
 	}
 }

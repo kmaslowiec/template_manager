@@ -4,6 +4,8 @@ public class TestDriveController {
 
 	public static void main(String[] args) {
 		TemplateController test = new TemplateController();
-		System.out.println(test.getAll().toString());
+		
+		
+		System.out.println(test.readAll().toString());
 	}
 }
