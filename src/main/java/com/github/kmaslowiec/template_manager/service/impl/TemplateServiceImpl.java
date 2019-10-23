@@ -9,8 +9,8 @@ import com.github.kmaslowiec.template_manager.service.TemplateService;
 import com.github.kmaslowiec.template_manager.service.WordParser;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 
-public class TemplateServiceImpl implements TemplateService{
-	
+public class TemplateServiceImpl implements TemplateService {
+
 	private WordParser parser;
 	private TemplateDaoImpl dao;
 
@@ -22,25 +22,40 @@ public class TemplateServiceImpl implements TemplateService{
 	@Override
 	public boolean saveTemplate(File[] files) {
 		Template template = parser.parseFromDocx(files[0]);
-		
+
 		return dao.save(template);
 	}
 
 	@Override
 	public boolean saveManyTemplates(File[] files) {
 		List<Template> temps = new ArrayList<>();
-		
-		for(File i : files) {
+
+		for (File i : files) {
 			temps.add(parser.parseFromDocx(i));
 		}
-		
+
 		return dao.saveAll(temps);
 	}
 
 	@Override
 	public boolean updateTemplate(File[] files) {
 		Template template = parser.parseFromDocx(files[0]);
-		
+
 		return dao.update(template);
+	}
+
+	@Override
+	public Template readTemplate(Template temp) {
+		return dao.find(temp);
+	}
+
+	@Override
+	public List<Template> readAllTemplates() {
+		return dao.getAll();
+	}
+
+	@Override
+	public boolean deleteTemplate(Template temp) {
+		return dao.delete(temp);
 	}
 }

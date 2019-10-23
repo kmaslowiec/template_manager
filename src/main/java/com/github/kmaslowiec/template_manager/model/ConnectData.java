@@ -33,17 +33,17 @@ public class ConnectData {
 	public Map<String, Template> loadFromFile(String baseName) {
 		Map<String, Template> templates = new HashMap<>();
 
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
-			templates = (HashMap<String, Template>) ois.readObject();	
-		}  catch (FileNotFoundException a){
-				log.info(String.format("File %s created by service", baseName));
-				return templates;
-		}
-		catch (ClassNotFoundException c) {
-			log.info(String.format("Class not s% found ", c.getClass().toString()));
+		try (ObjectInputStream ois = new ObjectInputStream(
+				new FileInputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
+			templates = (HashMap<String, Template>) ois.readObject();
+		} catch (FileNotFoundException a) {
+			log.info(String.format("File %s created by service", baseName));
+			return templates;
+		} catch (ClassNotFoundException b) {
+			log.info(String.format("Class not s% found ", b.getClass().toString()));
+			b.printStackTrace();
+		} catch (IOException c) {
 			c.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		return templates;

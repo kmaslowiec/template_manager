@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import com.github.kmaslowiec.template_manager.controller.TemplateController;
+import com.github.kmaslowiec.template_manager.model.DbListener;
+import com.github.kmaslowiec.template_manager.model.TemplateDao;
+import com.github.kmaslowiec.template_manager.model.dao_impl.TemplateDaoImpl;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 
 import javax.swing.JMenuBar;
@@ -25,12 +28,13 @@ import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class View extends JFrame {
+public class View extends JFrame implements DbListener {
 
 	private static final long serialVersionUID = -1663198732967801518L;
 
 	private TemplateController controller;
-
+	private TemplateDao model;
+	
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
@@ -45,9 +49,10 @@ public class View extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public View() {
-
+	public View(TemplateDao model) {
+		
 		controller = new TemplateController();
+		this.model = new TemplateDaoImpl();
 		openFile = new OpenFile();
 		templates = new ArrayList<>();
 		initComponents();
@@ -150,5 +155,10 @@ public class View extends JFrame {
 
 			}
 		});
+	}
+
+	@Override
+	public void dbUpdated() {
+		templates = model.getAll();
 	}
 }
