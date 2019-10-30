@@ -33,8 +33,8 @@ public class View extends JFrame implements DbListener {
 	private static final long serialVersionUID = -1663198732967801518L;
 
 	private TemplateController controller;
-	private TemplateDao model;
-	
+	private TemplateDaoImpl model;
+
 	private JMenuBar menuBar;
 	private JMenu mnFile;
 	private JMenuItem mntmAddTemplate;
@@ -42,19 +42,19 @@ public class View extends JFrame implements DbListener {
 	private JScrollPane scrollPane;
 	private JList<Template> list;
 	private DefaultListModel<Template> listModel;
-	private JMenuItem mntmAddElement;
+	private JMenuItem mntmPrintAll;
 	private List<Template> templates;
 	private JTextField textFieldSearch;
 
 	/**
 	 * Create the frame.
 	 */
-	public View(TemplateDao model) {
-		
-		controller = new TemplateController();
-		this.model = new TemplateDaoImpl();
+	public View(TemplateDaoImpl model) {
+		this.model = model;
+		model.addListener(this);
+		controller = new TemplateController(model, this);
 		openFile = new OpenFile();
-		templates = new ArrayList<>();
+		templates = model.getAll();
 		initComponents();
 		createEvents();
 	}
@@ -73,9 +73,9 @@ public class View extends JFrame implements DbListener {
 
 		mntmAddTemplate = new JMenuItem("Add template");
 		mnFile.add(mntmAddTemplate);
-		mntmAddElement = new JMenuItem("Save templates");
+		mntmPrintAll = new JMenuItem("Print all");
 
-		mnFile.add(mntmAddElement);
+		mnFile.add(mntmPrintAll);
 
 		scrollPane = new JScrollPane();
 
@@ -99,6 +99,7 @@ public class View extends JFrame implements DbListener {
 		setupDefaultJListRenderer(list);
 
 		getContentPane().setLayout(groupLayout);
+		initTemplates();
 	}
 
 	private void createEvents() {
@@ -117,11 +118,8 @@ public class View extends JFrame implements DbListener {
 	}
 
 	private void saveTemplatesEvent() {
-		mntmAddElement.addActionListener(a -> {
-			listModel.removeAllElements();
-			if (templates != null) {
-				listModel.addAll(templates);
-			}
+		mntmPrintAll.addActionListener(a -> {
+			
 		});
 	}
 
@@ -156,9 +154,20 @@ public class View extends JFrame implements DbListener {
 			}
 		});
 	}
+	
+	public void initTemplates() {	
+		if (templates != null) {
+			listModel.removeAllElements();
+			listModel.addAll(templates);
+		}
+	}
 
 	@Override
 	public void dbUpdated() {
 		templates = model.getAll();
+		listModel.removeAllElements();
+		if (templates != null) {
+			listModel.addAll(templates);
+		}
 	}
 }

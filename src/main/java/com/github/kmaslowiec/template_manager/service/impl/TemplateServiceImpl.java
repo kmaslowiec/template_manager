@@ -14,9 +14,9 @@ public class TemplateServiceImpl implements TemplateService {
 	private WordParser parser;
 	private TemplateDaoImpl dao;
 
-	public TemplateServiceImpl() {
+	public TemplateServiceImpl(TemplateDaoImpl dao) {
 		this.parser = new WordParser();
-		this.dao = new TemplateDaoImpl();
+		this.dao = dao;
 	}
 
 	@Override

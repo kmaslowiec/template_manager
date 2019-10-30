@@ -1,5 +1,6 @@
 package com.github.kmaslowiec.template_manager.model.dao_impl;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import com.github.kmaslowiec.template_manager.model.TemplateDao;
 import com.github.kmaslowiec.template_manager.model.ConnectData;
 import com.github.kmaslowiec.template_manager.model.DbListener;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
+import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
 import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 
 import lombok.extern.java.Log;
@@ -18,12 +20,11 @@ import lombok.extern.java.Log;
 public class TemplateDaoImpl implements TemplateDao {
 
 	private ConnectData data;
-	private String saveFileName = "dupa7";
-	private List<DbListener> listeners;
+	private String saveFileName = MyStringUtils.RES_BASE_NAME;
+	private List<DbListener> listeners = new ArrayList<>();
 
 	public TemplateDaoImpl() {
 		data = new ConnectData();
-		listeners = new ArrayList<>();
 	}
 
 	@Override
@@ -33,13 +34,21 @@ public class TemplateDaoImpl implements TemplateDao {
 			log.info(String.format("SAVE: Template  %s already exists.", temp.getFileName()));
 			return false;
 		} else {
-			map = data.loadFromFile(saveFileName);
-			map.put(temp.getFileName(), temp);
-			data.saveToFile(map, saveFileName);
-			notifyListeners();
+			if (noFile()) {
+				map.put(temp.getFileName(), temp);
+				data.saveToFile(map, saveFileName);
+				notifyListeners();
+				log.info(String.format("SAVE: Template  %s saved.", temp.getFileName()));
+				return templateExists(temp);
+			} else {
+				map = data.loadFromFile(saveFileName);
+				map.put(temp.getFileName(), temp);
+				data.saveToFile(map, saveFileName);
+				notifyListeners();
+				log.info(String.format("SAVE: Template  %s saved.", temp.getFileName()));
+				return templateExists(temp);
+			}
 		}
-		log.info(String.format("SAVE: Template  %s saved.", temp.getFileName()));
-		return templateExists(temp);
 	}
 
 	@Override
@@ -64,14 +73,16 @@ public class TemplateDaoImpl implements TemplateDao {
 			for (Template i : temps) {
 				map.put(i.getFileName(), i);
 				data.saveToFile(map, saveFileName);
+				notifyListeners();
 			}
-			notifyListeners();
+
 		} else {
 			for (Template i : temps) {
 				map.putIfAbsent(i.getFileName(), i);
 				data.saveToFile(map, saveFileName);
+				notifyListeners();
 			}
-			notifyListeners();
+
 		}
 
 		return map.equals(data.loadFromFile(saveFileName));
@@ -90,9 +101,7 @@ public class TemplateDaoImpl implements TemplateDao {
 			log.info(String.format("UPDATE:  %s does not exist.", temp.getFileName()));
 			return false;
 		}
-
 		Map<String, Template> saved = data.loadFromFile(saveFileName);
-		System.out.println(saved.toString());
 		return temp.getContent().contentEquals(saved.get(temp.getFileName()).getContent());
 	}
 
@@ -116,26 +125,31 @@ public class TemplateDaoImpl implements TemplateDao {
 	@Override
 	public List<Template> getAll() {
 		Map<String, Template> map = data.loadFromFile(saveFileName);
-		System.out.println(saveFileName);
 		Collection<Template> temps = map.values();
+
 		return new ArrayList<Template>(temps);
 	}
 
-	private boolean templateExists(Template temp) {
-		Map<String, Template> map = data.loadFromFile(saveFileName);
-
+	public boolean templateExists(Template temp) {
+		Map<String, Template> map = new HashMap<>();
+		map = data.loadFromFile(saveFileName);
 		return (map.containsKey(temp.getFileName()));
 	}
-	
-	public void addListener(DbListener observer ) {
-		if(listeners!=null) {
-			listeners.add(observer);
-		}
+
+	private boolean noFile() {
+		return data.loadFromFile(saveFileName).isEmpty();
 	}
-	
+
+	public void addListener(DbListener observer) {
+		if(observer!=null) {
+			listeners.add(observer);
+		}	
+	}
+
 	private void notifyListeners() {
-		if(listeners.size()>0 && listeners!=null ) {
-			for(DbListener i : listeners) {
+		if (listeners != null) {
+
+			for (DbListener i : listeners) {
 				i.dbUpdated();
 			}
 		}

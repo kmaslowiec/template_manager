@@ -6,4 +6,5 @@ public class MyStringUtils {
 	public static final String FILE_NAME = "letter";
 	public static final String TEMP_NAME = FILE_NAME;
 	public static final String CONTENT = "Lorem ipsum dolor sit amet, falli dolor tacimates pro at. Sea id docendi voluptatum. ";
+	public static final String RES_BASE_NAME = "save";
 }

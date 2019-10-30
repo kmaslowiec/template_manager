@@ -18,34 +18,28 @@ import lombok.extern.java.Log;
 public class ConnectData {
 
 	public void saveToFile(Map<String, Template> templates, String baseName) {
-		try {
-			FileOutputStream fos = new FileOutputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
+		try (ObjectOutputStream oos = new ObjectOutputStream(
+				new FileOutputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
 			oos.writeObject(templates);
-			oos.close();
-			fos.close();
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Template> loadFromFile(String baseName) {
 		Map<String, Template> templates = new HashMap<>();
 
 		try (ObjectInputStream ois = new ObjectInputStream(
 				new FileInputStream(MyStringUtils.RESOURCE_TEMPLATE_PATH + baseName))) {
 			templates = (HashMap<String, Template>) ois.readObject();
-		} catch (FileNotFoundException a) {
-			log.info(String.format("File %s created by service", baseName));
-			return templates;
+		} catch (FileNotFoundException e) {
+			log.info(String.format("ConnectData: File %s not found ", baseName));
 		} catch (ClassNotFoundException b) {
-			log.info(String.format("Class not s% found ", b.getClass().toString()));
+			log.info(String.format("ConnectData: Class %s not found ", b.getClass().toString()));
 			b.printStackTrace();
 		} catch (IOException c) {
 			c.printStackTrace();
-		}
-
+		} 
 		return templates;
 	}
 }

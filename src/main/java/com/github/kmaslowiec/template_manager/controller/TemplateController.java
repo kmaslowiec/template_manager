@@ -6,15 +6,18 @@ import java.util.List;
 import com.github.kmaslowiec.template_manager.model.dao_impl.TemplateDaoImpl;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 import com.github.kmaslowiec.template_manager.service.impl.TemplateServiceImpl;
+import com.github.kmaslowiec.template_manager.views.View;
 
 public class TemplateController {
 
 	private TemplateServiceImpl service;
 	private TemplateDaoImpl dao;
-
-	public TemplateController() {
-		service = new TemplateServiceImpl();
-		dao = new TemplateDaoImpl();
+	private View view;
+	
+	public TemplateController(TemplateDaoImpl dao, View view) {
+		this.dao = dao;
+		this.view = view;
+		service = new TemplateServiceImpl(dao);	;
 	}
 
 	public boolean create(File[] files) {		
