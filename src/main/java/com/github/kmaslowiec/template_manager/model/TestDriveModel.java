@@ -9,7 +9,6 @@ public class TestDriveModel {
 		ConnectData data = new ConnectData();
 
 		TemplateDaoImpl imp = new TemplateDaoImpl();
-		//boolean a = imp.templateExists(new Template("dupa", "dupa", "dupa"));
 		imp.save(ObjectFactory.Template());
 		System.out.println(imp.save(ObjectFactory.Template_name_content("Hello", "cos")));
 	}

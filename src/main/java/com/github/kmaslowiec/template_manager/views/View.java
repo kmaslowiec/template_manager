@@ -99,7 +99,7 @@ public class View extends JFrame implements DbListener {
 		setupDefaultJListRenderer(list);
 
 		getContentPane().setLayout(groupLayout);
-		initTemplates();
+		initTemplates(templates);
 	}
 
 	private void createEvents() {
@@ -119,7 +119,7 @@ public class View extends JFrame implements DbListener {
 
 	private void saveTemplatesEvent() {
 		mntmPrintAll.addActionListener(a -> {
-			
+
 		});
 	}
 
@@ -150,12 +150,18 @@ public class View extends JFrame implements DbListener {
 	private void searchEngineEvent() {
 		textFieldSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				String seekWord = textFieldSearch.getText();
+				if (seekWord.isBlank()) {
+					initTemplates(templates);
+				} else {
+					List<Template> seekResult = MySearch.search(templates, seekWord);
+					initTemplates(seekResult);
+				}
 			}
 		});
 	}
-	
-	public void initTemplates() {	
+
+	public void initTemplates(List<Template> templates) {
 		if (templates != null) {
 			listModel.removeAllElements();
 			listModel.addAll(templates);

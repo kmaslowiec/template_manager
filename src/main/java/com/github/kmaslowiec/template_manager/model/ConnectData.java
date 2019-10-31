@@ -39,7 +39,7 @@ public class ConnectData {
 			b.printStackTrace();
 		} catch (IOException c) {
 			c.printStackTrace();
-		} 
+		}
 		return templates;
 	}
 }

@@ -141,9 +141,9 @@ public class TemplateDaoImpl implements TemplateDao {
 	}
 
 	public void addListener(DbListener observer) {
-		if(observer!=null) {
+		if (observer != null) {
 			listeners.add(observer);
-		}	
+		}
 	}
 
 	private void notifyListeners() {

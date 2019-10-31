@@ -1,4 +1,4 @@
-package com.github.kmaslowiec.template_manager.service;
+package com.github.kmaslowiec.template_manager.views;
 
 import java.util.List;
 import java.util.stream.Collectors;
