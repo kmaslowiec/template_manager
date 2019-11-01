@@ -10,7 +10,6 @@ public interface TemplateService {
 	boolean saveTemplate(File[] files);
 	boolean saveManyTemplates(File[] files);
 	boolean updateTemplate(File[] files);
-	boolean deleteTemplate(Template template);
 	Template readTemplate(Template temp);
 	List<Template> readAllTemplates();
 }

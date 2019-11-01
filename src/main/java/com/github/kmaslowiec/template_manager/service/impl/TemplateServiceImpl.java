@@ -53,9 +53,4 @@ public class TemplateServiceImpl implements TemplateService {
 	public List<Template> readAllTemplates() {
 		return dao.getAll();
 	}
-
-	@Override
-	public boolean deleteTemplate(Template temp) {
-		return dao.delete(temp);
-	}
 }

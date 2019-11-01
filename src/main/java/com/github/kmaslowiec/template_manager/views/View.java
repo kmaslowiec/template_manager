@@ -127,6 +127,8 @@ public class View extends JFrame implements DbListener {
 	}
 
 	private void templateClickedEvent() {
+		
+		
 		list.addListSelectionListener(a -> {
 			JPopupMenu pop = new JPopupMenu();
 			JMenuItem item = new JMenuItem("delete");
@@ -141,9 +143,11 @@ public class View extends JFrame implements DbListener {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 						if (e.getButton() == MouseEvent.BUTTON3) {
-							pop.show(source, e.getX(), e.getY());
+							if (selected != null)
+								pop.show(source, e.getX(), e.getY());
 							item.addActionListener(a -> {
-								System.out.println(selected.getFileName());
+								controller.delete(selected);
+							
 							});
 						}
 					}
@@ -164,7 +168,6 @@ public class View extends JFrame implements DbListener {
 				if (renderer instanceof JLabel && value instanceof Template) {
 					((JLabel) renderer).setText(((Template) value).getFileName());
 				}
-
 				return renderer;
 			}
 		});

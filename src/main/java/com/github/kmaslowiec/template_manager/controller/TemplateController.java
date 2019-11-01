@@ -29,7 +29,11 @@ public class TemplateController {
 		}
 		return false;
 	}
-
+	
+	public boolean delete(Template temp) {
+		return dao.delete(temp);
+	}
+	
 	public List<Template> readAll() {
 		return dao.getAll();
 	}
