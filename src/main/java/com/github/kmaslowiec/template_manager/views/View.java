@@ -13,6 +13,7 @@ import com.github.kmaslowiec.template_manager.service.entity.Template;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,6 +27,8 @@ import java.util.List;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 
 public class View extends JFrame implements DbListener {
@@ -125,7 +128,27 @@ public class View extends JFrame implements DbListener {
 
 	private void templateClickedEvent() {
 		list.addListSelectionListener(a -> {
-
+			JPopupMenu pop = new JPopupMenu();
+			JMenuItem item = new JMenuItem("delete");
+			JMenuItem item2 = new JMenuItem("rename");
+			pop.add(item);
+			pop.add(item2);
+			list.add(pop);
+			if (!a.getValueIsAdjusting()) {
+				JList<Template> source = (JList<Template>) a.getSource();
+				Template selected = (Template) source.getSelectedValue();
+				source.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if (e.getButton() == MouseEvent.BUTTON3) {
+							pop.show(source, e.getX(), e.getY());
+							item.addActionListener(a -> {
+								System.out.println(selected.getFileName());
+							});
+						}
+					}
+				});
+			}
 		});
 	}
 
