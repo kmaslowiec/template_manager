@@ -1,4 +1,4 @@
-package com.github.kmaslowiec.template_manager.service;
+package com.github.kmaslowiec.template_manager.views;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

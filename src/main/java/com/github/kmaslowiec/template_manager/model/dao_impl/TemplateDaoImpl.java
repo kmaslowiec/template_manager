@@ -1,6 +1,5 @@
 package com.github.kmaslowiec.template_manager.model.dao_impl;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -118,7 +117,6 @@ public class TemplateDaoImpl implements TemplateDao {
 			log.info(String.format("DELETE:  %s does not exist.", temp.getFileName()));
 			return false;
 		}
-
 		return !templateExists(temp);
 	}
 

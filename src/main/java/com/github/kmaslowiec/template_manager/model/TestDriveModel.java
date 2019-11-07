@@ -6,7 +6,7 @@ import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 public class TestDriveModel {
 
 	public static void main(String[] args) {
-		ConnectData data = new ConnectData();
+		//ConnectData data = new ConnectData();
 
 		TemplateDaoImpl imp = new TemplateDaoImpl();
 		imp.save(ObjectFactory.Template());

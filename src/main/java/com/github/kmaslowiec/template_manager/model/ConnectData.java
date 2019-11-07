@@ -26,6 +26,7 @@ public class ConnectData {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Map<String, Template> loadFromFile(String baseName) {
 		Map<String, Template> templates = new HashMap<>();
 

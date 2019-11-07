@@ -13,7 +13,7 @@ public class Application {
 			public void run() {
 				TemplateDaoImpl model = new TemplateDaoImpl();
 				View view = new View(model);
-				new TemplateController(model, view);
+				new TemplateController(model);
 				view.setVisible(true);
 			}
 		});

@@ -22,7 +22,7 @@ public class TemplateServiceImpl implements TemplateService {
 	@Override
 	public boolean saveTemplate(File[] files) {
 		Template template = parser.parseFromDocx(files[0]);
-
+	
 		return dao.save(template);
 	}
 

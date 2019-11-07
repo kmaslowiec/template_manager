@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 
 import com.github.kmaslowiec.template_manager.controller.TemplateController;
 import com.github.kmaslowiec.template_manager.model.DbListener;
-import com.github.kmaslowiec.template_manager.model.TemplateDao;
 import com.github.kmaslowiec.template_manager.model.dao_impl.TemplateDaoImpl;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 
@@ -22,7 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.DefaultListCellRenderer;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
@@ -45,9 +43,9 @@ public class View extends JFrame implements DbListener {
 	private JScrollPane scrollPane;
 	private JList<Template> list;
 	private DefaultListModel<Template> listModel;
-	private JMenuItem mntmPrintAll;
 	private List<Template> templates;
 	private JTextField textFieldSearch;
+	private ClipBoardMng clipboard;
 
 	/**
 	 * Create the frame.
@@ -55,7 +53,8 @@ public class View extends JFrame implements DbListener {
 	public View(TemplateDaoImpl model) {
 		this.model = model;
 		model.addListener(this);
-		controller = new TemplateController(model, this);
+		clipboard = new ClipBoardMng();
+		controller = new TemplateController(model);
 		openFile = new OpenFile();
 		templates = model.getAll();
 		initComponents();
@@ -76,9 +75,6 @@ public class View extends JFrame implements DbListener {
 
 		mntmAddTemplate = new JMenuItem("Add template");
 		mnFile.add(mntmAddTemplate);
-		mntmPrintAll = new JMenuItem("Print all");
-
-		mnFile.add(mntmPrintAll);
 
 		scrollPane = new JScrollPane();
 
@@ -107,7 +103,6 @@ public class View extends JFrame implements DbListener {
 
 	private void createEvents() {
 		addTemplateEvent();
-		saveTemplatesEvent();
 		templateClickedEvent();
 		searchEngineEvent();
 	}
@@ -120,15 +115,7 @@ public class View extends JFrame implements DbListener {
 
 	}
 
-	private void saveTemplatesEvent() {
-		mntmPrintAll.addActionListener(a -> {
-
-		});
-	}
-
 	private void templateClickedEvent() {
-		
-		
 		list.addListSelectionListener(a -> {
 			JPopupMenu pop = new JPopupMenu();
 			JMenuItem item = new JMenuItem("delete");
@@ -137,8 +124,11 @@ public class View extends JFrame implements DbListener {
 			pop.add(item2);
 			list.add(pop);
 			if (!a.getValueIsAdjusting()) {
+				@SuppressWarnings("unchecked")
 				JList<Template> source = (JList<Template>) a.getSource();
 				Template selected = (Template) source.getSelectedValue();
+				if (selected != null)
+					clipboard.copyToClipboard(selected.getContent());
 				source.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
@@ -147,7 +137,6 @@ public class View extends JFrame implements DbListener {
 								pop.show(source, e.getX(), e.getY());
 							item.addActionListener(a -> {
 								controller.delete(selected);
-							
 							});
 						}
 					}
