@@ -15,6 +15,4 @@ public interface TemplateDao {
 	public boolean delete(Template temp);
 
 	public List<Template> getAll();
-
-	public Template find(Template temp);
 }

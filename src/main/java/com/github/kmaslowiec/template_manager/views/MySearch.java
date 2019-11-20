@@ -9,7 +9,7 @@ public class MySearch {
 
 	public static List<Template> search(List<Template> list, String word) {
 		return list.stream()
-				.filter(a -> a.getFileName().toLowerCase().replaceAll("\\s", "").contains(word.toLowerCase().trim()))
+				.filter(a -> a.getTempName().toLowerCase().replaceAll("\\s", "").contains(word.toLowerCase().trim()))
 				.collect(Collectors.toList());
 	}
 }

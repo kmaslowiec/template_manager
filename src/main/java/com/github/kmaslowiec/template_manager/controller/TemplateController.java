@@ -31,6 +31,10 @@ public class TemplateController {
 		return dao.delete(temp);
 	}
 	
+	public boolean update(Template temp) {
+		return dao.update(temp);
+	}
+	
 	public List<Template> readAll() {
 		return dao.getAll();
 	}

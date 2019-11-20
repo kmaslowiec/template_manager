@@ -11,7 +11,6 @@ import com.github.kmaslowiec.template_manager.model.ConnectData;
 import com.github.kmaslowiec.template_manager.model.DbListener;
 import com.github.kmaslowiec.template_manager.service.entity.Template;
 import com.github.kmaslowiec.template_manager.utils.MyStringUtils;
-import com.github.kmaslowiec.template_manager.utils.ObjectFactory;
 
 import lombok.extern.java.Log;
 
@@ -48,21 +47,6 @@ public class TemplateDaoImpl implements TemplateDao {
 				return templateExists(temp);
 			}
 		}
-	}
-
-	@Override
-	public Template find(Template temp) {
-		Template result = ObjectFactory.Template_empty();
-
-		Map<String, Template> map = data.loadFromFile(saveFileName);
-		if (templateExists(temp)) {
-			log.info(String.format("READ: Template  %s found.", temp.getFileName()));
-			result = map.get(temp.getFileName());
-		} else {
-			log.info(String.format("READ: Template  %s not found.", temp.getFileName()));
-		}
-
-		return result;
 	}
 
 	@Override

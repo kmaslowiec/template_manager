@@ -45,11 +45,6 @@ public class TemplateServiceImpl implements TemplateService {
 	}
 
 	@Override
-	public Template readTemplate(Template temp) {
-		return dao.find(temp);
-	}
-
-	@Override
 	public List<Template> readAllTemplates() {
 		return dao.getAll();
 	}
