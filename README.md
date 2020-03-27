@@ -1,9 +1,9 @@
 # template_manager v1.0
 
-Read the templates from docx file, parse it to String, serilize and save it to txt file
-Using GUI interface (Swing) a user can choose the template from the List what autmatically copy the text to system clipboard.
-Design patters training. 
+The app reads the text from docx files, transforms it to String, compresses it and saves it to the txt file. 
 
-# App schema:
+A user accesses the text by clicking a file name listed in the table.
+The Swing GUI helps in an easy way to copy the text to clipboard with one click, instead of selecting the long paragraphs. 
 
-![app schema](https://github.com/kmaslowiec/template_manager/blob/master/app_schema_web.jpg)
+# The Goal. 
+An easy way to copy/paste the text across the platforms/application. For example: E-mail/chats templates.
